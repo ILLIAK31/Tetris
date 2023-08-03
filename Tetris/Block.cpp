@@ -65,6 +65,19 @@ Block::Block(std::vector<std::vector<unsigned char>> &matrix,int num,int num2)
 		}
 		matrix[this->X][this->Y] = 13;
 	}
+	else if (num == 4)
+	{
+		this->Y = 0;
+		if (num2 == 1)
+			this->X = 0;
+		else if (num2 == 2)
+			this->X = 1;
+		else if (num2 == 3)
+			this->X = 2;
+		else if (num2 == 4)
+			this->X = 3;
+		matrix[this->X][this->Y] = 14;
+	}
 }
 
 int& Block::Get_X()

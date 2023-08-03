@@ -22,11 +22,11 @@ private:
 	void Update();
 	void Delete();
 	bool check_collision_y(int type) , check_collision_left(int type) , check_collision_right(int type) , check_collision(int type);
-	int Position{1}, Position_Start{}, Score{0};
+	int Position{1}, Position0{1}, Position_Start{}, Score{0};
 	std::vector<std::vector<unsigned char>> matrix;
 	std::vector<Block> blocks;
 	bool status{true};
 	std::chrono::high_resolution_clock::time_point start, end;
 	std::chrono::milliseconds duration, duration0{0};
-	int speed{700};
+	int speed{200}; //700
 };

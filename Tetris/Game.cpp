@@ -18,6 +18,9 @@ Game::Game() : Window(sf::VideoMode(CELL* COLUMNS* SCREEN, CELL* ROWS* SCREEN), 
 			matrix[col][row] = 0;
 	Window.setFramerateLimit(8.2);
 	start = std::chrono::high_resolution_clock::now();
+	//
+	//Position_Start = 4;
+	//
 }
 
 void Game::Run()
@@ -27,7 +30,7 @@ void Game::Run()
 		if (status == true)
 		{
 			std::mt19937 mt_engine(std::random_device{}());
-			std::uniform_int_distribution<int> dist(1, 2);
+			std::uniform_int_distribution<int> dist(1, 3);
 			Position_Start = dist(mt_engine);
 			status = false;
 			if (Position_Start == 1)
@@ -53,6 +56,20 @@ void Game::Run()
 					Window.close();
 				}
 				Block block1(matrix,2,1), block2(matrix,2,2), block3(matrix, 2, 3), block4(matrix, 2, 4);
+				blocks.push_back(block1);
+				blocks.push_back(block2);
+				blocks.push_back(block3);
+				blocks.push_back(block4);
+			}
+			else if (Position_Start == 3)
+			{
+				Position = 1;
+				if ((matrix[0][0] != 0) || (matrix[0][1] != 0) || (matrix[1][1] != 0) || (matrix[2][1] != 0))
+				{
+					std::cout << "GAME OVER!" << std::endl << "Score : " << Score << std::endl;
+					Window.close();
+				}
+				Block block1(matrix, 3, 1), block2(matrix, 3, 2), block3(matrix, 3, 3), block4(matrix, 3, 4);
 				blocks.push_back(block1);
 				blocks.push_back(block2);
 				blocks.push_back(block3);
@@ -92,6 +109,12 @@ void Game::Render()
 			else if (matrix[col][row] == 12)
 			{
 				cell.setFillColor(sf::Color(255, 165, 0));
+				cell.setPosition(CELL * col, CELL * row);
+				Window.draw(cell);
+			}
+			else if (matrix[col][row] == 13)
+			{
+				cell.setFillColor(sf::Color::Blue);
 				cell.setPosition(CELL * col, CELL * row);
 				Window.draw(cell);
 			}
@@ -237,7 +260,7 @@ void Game::Process()
 			++Position;
 			if (Position > 4)
 				Position = 1;
-			if ((Position == 2)&&(check_collision(21)))
+			if ((Position == 2) && (check_collision(21)))
 			{
 				matrix[blocks[2].Get_X()--][blocks[2].Get_Y()--] = 0;
 				matrix[blocks[2].Get_X()][blocks[2].Get_Y()] = 12;
@@ -255,7 +278,7 @@ void Game::Process()
 				matrix[blocks[3].Get_X()++][blocks[3].Get_Y()++] = 0;
 				matrix[blocks[3].Get_X()][blocks[3].Get_Y()] = 12;
 			}
-			else if((Position == 4) && (check_collision(23)))
+			else if ((Position == 4) && (check_collision(23)))
 			{
 				matrix[blocks[1].Get_X()++][blocks[1].Get_Y()] = 0;
 				matrix[blocks[1].Get_X()][blocks[1].Get_Y()] = 12;
@@ -273,8 +296,162 @@ void Game::Process()
 				matrix[blocks[3].Get_X()++][blocks[3].Get_Y()++] = 0;
 				matrix[blocks[3].Get_X()][blocks[3].Get_Y()] = 12;
 				matrix[blocks[2].Get_X()++][blocks[2].Get_Y()++] = 0;
-			    ++blocks[2].Get_Y();
+				++blocks[2].Get_Y();
 				matrix[blocks[2].Get_X()][blocks[2].Get_Y()] = 12;
+			}
+			else
+			{
+				--Position;
+				if (Position == 0)
+					Position = 4;
+			}
+		}
+		break;
+	case 3:
+		if ((sf::Keyboard::isKeyPressed(sf::Keyboard::Left)))
+		{
+			if ((Position == 1) && (check_collision_left(3)))
+			{
+				matrix[blocks[1].Get_X()--][blocks[1].Get_Y()] = 0;
+				matrix[blocks[1].Get_X()][blocks[1].Get_Y()] = 13;
+				matrix[blocks[0].Get_X()--][blocks[0].Get_Y()] = 0;
+				matrix[blocks[0].Get_X()][blocks[0].Get_Y()] = 13;
+				matrix[blocks[2].Get_X()--][blocks[2].Get_Y()] = 0;
+				matrix[blocks[2].Get_X()][blocks[2].Get_Y()] = 13;
+				matrix[blocks[3].Get_X()--][blocks[3].Get_Y()] = 0;
+				matrix[blocks[3].Get_X()][blocks[3].Get_Y()] = 13;
+			}
+			else if ((Position == 2) && (check_collision_left(32)))
+			{
+				matrix[blocks[0].Get_X()--][blocks[0].Get_Y()] = 0;
+				matrix[blocks[0].Get_X()][blocks[0].Get_Y()] = 13;
+				matrix[blocks[1].Get_X()--][blocks[1].Get_Y()] = 0;
+				matrix[blocks[1].Get_X()][blocks[1].Get_Y()] = 13;
+				matrix[blocks[3].Get_X()--][blocks[3].Get_Y()] = 0;
+				matrix[blocks[3].Get_X()][blocks[3].Get_Y()] = 13;
+				matrix[blocks[2].Get_X()--][blocks[2].Get_Y()] = 0;
+				matrix[blocks[2].Get_X()][blocks[2].Get_Y()] = 13;
+			}
+			else if ((Position == 3) && (check_collision_left(33)))
+			{
+				matrix[blocks[1].Get_X()--][blocks[1].Get_Y()] = 0;
+				matrix[blocks[1].Get_X()][blocks[1].Get_Y()] = 13;
+				matrix[blocks[3].Get_X()--][blocks[3].Get_Y()] = 0;
+				matrix[blocks[3].Get_X()][blocks[3].Get_Y()] = 13;
+				matrix[blocks[0].Get_X()--][blocks[0].Get_Y()] = 0;
+				matrix[blocks[0].Get_X()][blocks[0].Get_Y()] = 13;
+				matrix[blocks[2].Get_X()--][blocks[2].Get_Y()] = 0;
+				matrix[blocks[2].Get_X()][blocks[2].Get_Y()] = 13;
+			}
+			else if ((Position == 4) && (check_collision_left(34)))
+			{
+				matrix[blocks[1].Get_X()--][blocks[1].Get_Y()] = 0;
+				matrix[blocks[1].Get_X()][blocks[1].Get_Y()] = 13;
+				matrix[blocks[0].Get_X()--][blocks[0].Get_Y()] = 0;
+				matrix[blocks[0].Get_X()][blocks[0].Get_Y()] = 13;
+				matrix[blocks[2].Get_X()--][blocks[2].Get_Y()] = 0;
+				matrix[blocks[2].Get_X()][blocks[2].Get_Y()] = 13;
+				matrix[blocks[3].Get_X()--][blocks[3].Get_Y()] = 0;
+				matrix[blocks[3].Get_X()][blocks[3].Get_Y()] = 13;	
+			}
+		}
+		else if ((sf::Keyboard::isKeyPressed(sf::Keyboard::Right)))
+		{
+			if ((Position == 1) && (check_collision_right(3)))
+			{
+				matrix[blocks[0].Get_X()++][blocks[0].Get_Y()] = 0;
+				matrix[blocks[0].Get_X()][blocks[0].Get_Y()] = 13;
+				matrix[blocks[3].Get_X()++][blocks[3].Get_Y()] = 0;
+				matrix[blocks[3].Get_X()][blocks[3].Get_Y()] = 13;
+				matrix[blocks[2].Get_X()++][blocks[2].Get_Y()] = 0;
+				matrix[blocks[2].Get_X()][blocks[2].Get_Y()] = 13;
+				matrix[blocks[1].Get_X()++][blocks[1].Get_Y()] = 0;
+				matrix[blocks[1].Get_X()][blocks[1].Get_Y()] = 13;
+			}
+			else if ((Position == 2) && (check_collision_right(32)))
+			{
+				matrix[blocks[2].Get_X()++][blocks[2].Get_Y()] = 0;
+				matrix[blocks[2].Get_X()][blocks[2].Get_Y()] = 13;
+				matrix[blocks[1].Get_X()++][blocks[1].Get_Y()] = 0;
+				matrix[blocks[1].Get_X()][blocks[1].Get_Y()] = 13;
+				matrix[blocks[3].Get_X()++][blocks[3].Get_Y()] = 0;
+				matrix[blocks[3].Get_X()][blocks[3].Get_Y()] = 13;
+				matrix[blocks[0].Get_X()++][blocks[0].Get_Y()] = 0;
+				matrix[blocks[0].Get_X()][blocks[0].Get_Y()] = 13;
+			}
+			else if ((Position == 3) && (check_collision_right(33)))
+			{
+				matrix[blocks[2].Get_X()++][blocks[2].Get_Y()] = 0;
+				matrix[blocks[2].Get_X()][blocks[2].Get_Y()] = 13;
+				matrix[blocks[3].Get_X()++][blocks[3].Get_Y()] = 0;
+				matrix[blocks[3].Get_X()][blocks[3].Get_Y()] = 13;
+				matrix[blocks[0].Get_X()++][blocks[0].Get_Y()] = 0;
+				matrix[blocks[0].Get_X()][blocks[0].Get_Y()] = 13;
+				matrix[blocks[1].Get_X()++][blocks[1].Get_Y()] = 0;
+				matrix[blocks[1].Get_X()][blocks[1].Get_Y()] = 13;
+			}
+			else if ((Position == 4) && (check_collision_right(34)))
+			{
+				matrix[blocks[0].Get_X()++][blocks[0].Get_Y()] = 0;
+				matrix[blocks[0].Get_X()][blocks[0].Get_Y()] = 13;
+				matrix[blocks[2].Get_X()++][blocks[2].Get_Y()] = 0;
+				matrix[blocks[2].Get_X()][blocks[2].Get_Y()] = 13;
+				matrix[blocks[3].Get_X()++][blocks[3].Get_Y()] = 0;
+				matrix[blocks[3].Get_X()][blocks[3].Get_Y()] = 13;
+				matrix[blocks[1].Get_X()++][blocks[1].Get_Y()] = 0;
+				matrix[blocks[1].Get_X()][blocks[1].Get_Y()] = 13;
+			}
+		}
+		else if (sf::Keyboard::isKeyPressed(sf::Keyboard::Up))
+		{
+			++Position;
+			if (Position > 4)
+				Position = 1;
+			if ((Position == 2) && (check_collision(31)))
+			{
+				matrix[blocks[0].Get_X()][blocks[0].Get_Y()--] = 0;
+				matrix[blocks[0].Get_X()][blocks[0].Get_Y()] = 13;
+				matrix[blocks[1].Get_X()][blocks[1].Get_Y()--] = 0;
+				matrix[blocks[1].Get_X()][blocks[1].Get_Y()] = 13;
+				matrix[blocks[2].Get_X()][blocks[2].Get_Y()--] = 0;
+				--blocks[2].Get_Y();
+				matrix[blocks[2].Get_X()][blocks[2].Get_Y()] = 13;
+				matrix[blocks[3].Get_X()--][blocks[3].Get_Y()] = 0;
+				--blocks[3].Get_X();
+				matrix[blocks[3].Get_X()][blocks[3].Get_Y()] = 13;
+			}
+			else if ((Position == 3) && (check_collision(32)))
+			{
+				matrix[blocks[3].Get_X()++][blocks[3].Get_Y()] = 0;
+				++blocks[3].Get_X();
+				matrix[blocks[3].Get_X()][blocks[3].Get_Y()] = 13;
+				matrix[blocks[2].Get_X()++][blocks[2].Get_Y()++] = 0;
+				matrix[blocks[2].Get_X()][blocks[2].Get_Y()] = 13;
+				matrix[blocks[0].Get_X()++][blocks[0].Get_Y()++] = 0;
+				matrix[blocks[0].Get_X()][blocks[0].Get_Y()] = 13;
+			}
+			else if ((Position == 4) && (check_collision(33)))
+			{
+				matrix[blocks[0].Get_X()++][blocks[0].Get_Y()--] = 0;
+				matrix[blocks[0].Get_X()][blocks[0].Get_Y()] = 13;
+				matrix[blocks[1].Get_X()++][blocks[1].Get_Y()++] = 0;
+				matrix[blocks[1].Get_X()][blocks[1].Get_Y()] = 13;
+			}
+			else if ((Position == 1) && (check_collision(3)))
+			{
+				matrix[blocks[1].Get_X()--][blocks[1].Get_Y()] = 0;
+				matrix[blocks[1].Get_X()][blocks[1].Get_Y()] = 13;
+				matrix[blocks[0].Get_X()--][blocks[0].Get_Y()++] = 0;
+				--blocks[0].Get_X();
+				matrix[blocks[0].Get_X()][blocks[0].Get_Y()] = 13;
+				matrix[blocks[2].Get_X()--][blocks[2].Get_Y()++] = 0;
+				matrix[blocks[2].Get_X()][blocks[2].Get_Y()] = 13;
+			}
+			else
+			{
+				--Position;
+				if (Position == 0)
+					Position = 4;
 			}
 		}
 		break;
@@ -361,6 +538,60 @@ void Game::Update()
 				blocks.clear();
 			}
 			break;
+		case 3:
+			if ((blocks[1].Get_Y() + 1 <= 19) &&(blocks[2].Get_Y() + 1 <= 19) && (blocks[3].Get_Y() + 1 <= 19) && (status == false) && (check_collision_y(3)) && (Position == 1))
+			{
+				matrix[blocks[1].Get_X()][blocks[1].Get_Y()++] = 0;
+				matrix[blocks[1].Get_X()][blocks[1].Get_Y()] = 13;
+				matrix[blocks[2].Get_X()][blocks[2].Get_Y()++] = 0;
+				matrix[blocks[2].Get_X()][blocks[2].Get_Y()] = 13;
+				matrix[blocks[3].Get_X()][blocks[3].Get_Y()++] = 0;
+				matrix[blocks[3].Get_X()][blocks[3].Get_Y()] = 13;
+				matrix[blocks[0].Get_X()][blocks[0].Get_Y()++] = 0;
+				matrix[blocks[0].Get_X()][blocks[0].Get_Y()] = 13;
+			}
+			else if ((blocks[3].Get_Y() + 1 <= 19) && (status == false) && (check_collision_y(32)) && (Position == 2))
+			{
+				matrix[blocks[3].Get_X()][blocks[3].Get_Y()++] = 0;
+				matrix[blocks[3].Get_X()][blocks[3].Get_Y()] = 13;
+				matrix[blocks[1].Get_X()][blocks[1].Get_Y()++] = 0;
+				matrix[blocks[1].Get_X()][blocks[1].Get_Y()] = 13;
+				matrix[blocks[0].Get_X()][blocks[0].Get_Y()++] = 0;
+				matrix[blocks[0].Get_X()][blocks[0].Get_Y()] = 13;
+				matrix[blocks[2].Get_X()][blocks[2].Get_Y()++] = 0;
+				matrix[blocks[2].Get_X()][blocks[2].Get_Y()] = 13;
+				
+			}
+			else if ((blocks[3].Get_Y() + 1 <= 19) && (status == false) && (check_collision_y(33)) && (Position == 3))
+			{
+				matrix[blocks[3].Get_X()][blocks[3].Get_Y()++] = 0;
+				matrix[blocks[3].Get_X()][blocks[3].Get_Y()] = 13;
+				matrix[blocks[1].Get_X()][blocks[1].Get_Y()++] = 0;
+				matrix[blocks[1].Get_X()][blocks[1].Get_Y()] = 13;
+				matrix[blocks[0].Get_X()][blocks[0].Get_Y()++] = 0;
+				matrix[blocks[0].Get_X()][blocks[0].Get_Y()] = 13;
+				matrix[blocks[2].Get_X()][blocks[2].Get_Y()++] = 0;
+				matrix[blocks[2].Get_X()][blocks[2].Get_Y()] = 13;
+			}
+			else if ((blocks[3].Get_Y() + 1 <= 19) && (status == false) && (check_collision_y(34)) && (Position == 4))
+			{
+				matrix[blocks[3].Get_X()][blocks[3].Get_Y()++] = 0;
+				matrix[blocks[3].Get_X()][blocks[3].Get_Y()] = 13;
+				matrix[blocks[1].Get_X()][blocks[1].Get_Y()++] = 0;
+				matrix[blocks[1].Get_X()][blocks[1].Get_Y()] = 13;
+				matrix[blocks[2].Get_X()][blocks[2].Get_Y()++] = 0;
+				matrix[blocks[2].Get_X()][blocks[2].Get_Y()] = 13;
+				matrix[blocks[0].Get_X()][blocks[0].Get_Y()++] = 0;
+				matrix[blocks[0].Get_X()][blocks[0].Get_Y()] = 13;
+			}
+			else
+			{
+				if (speed > 200)
+					speed -= 10;
+				status = true;
+				blocks.clear();
+			}
+			break;
 		}
 	}
 
@@ -400,6 +631,14 @@ bool Game::check_collision_y(int type)
 		return ((matrix[blocks[1].Get_X()][blocks[1].Get_Y() + 1] == 0)&&(matrix[blocks[0].Get_X()][blocks[0].Get_Y() + 1] == 0)&&(matrix[blocks[3].Get_X()][blocks[3].Get_Y() + 1] == 0)) ? true : false;
 	else if(type == 24)
 		return ((matrix[blocks[1].Get_X()][blocks[1].Get_Y() + 1] == 0) && (matrix[blocks[2].Get_X()][blocks[2].Get_Y() + 1] == 0)) ? true : false;
+	else if(type == 3)
+		return ((matrix[blocks[1].Get_X()][blocks[1].Get_Y() + 1] == 0) && (matrix[blocks[2].Get_X()][blocks[2].Get_Y() + 1] == 0) && (matrix[blocks[3].Get_X()][blocks[3].Get_Y() + 1] == 0)) ? true : false;
+	else if(type == 32)
+		return ((matrix[blocks[3].Get_X()][blocks[3].Get_Y() + 1] == 0) && (matrix[blocks[2].Get_X()][blocks[2].Get_Y() + 1] == 0)) ? true : false;
+	else if (type == 33)
+		return ((matrix[blocks[3].Get_X()][blocks[3].Get_Y() + 1] == 0) && (matrix[blocks[1].Get_X()][blocks[1].Get_Y() + 1] == 0) && (matrix[blocks[0].Get_X()][blocks[0].Get_Y() + 1] == 0)) ? true : false;
+	else if (type == 34)
+		return ((matrix[blocks[3].Get_X()][blocks[3].Get_Y() + 1] == 0) && (matrix[blocks[1].Get_X()][blocks[1].Get_Y() + 1] == 0)) ? true : false;
 }
 
 bool Game::check_collision_left(int type)
@@ -436,6 +675,34 @@ bool Game::check_collision_left(int type)
 	{
 		if (blocks[2].Get_X() - 1 >= 0)
 			return ((matrix[blocks[1].Get_X() - 1][blocks[1].Get_Y()] == 0) && (matrix[blocks[3].Get_X() - 1][blocks[3].Get_Y()] == 0) && (matrix[blocks[2].Get_X() - 1][blocks[2].Get_Y()] == 0)) ? true : false;
+		else
+			return false;
+	}
+	else if (type == 3)
+	{
+		if (blocks[0].Get_X() - 1 >= 0)
+			return ((matrix[blocks[0].Get_X() - 1][blocks[0].Get_Y()] == 0) && (matrix[blocks[1].Get_X() - 1][blocks[1].Get_Y()] == 0)) ? true : false;
+		else
+			return false;
+	}
+	else if (type == 32)
+	{
+		if (blocks[0].Get_X() - 1 >= 0)
+			return ((matrix[blocks[0].Get_X() - 1][blocks[0].Get_Y()] == 0) && (matrix[blocks[1].Get_X() - 1][blocks[1].Get_Y()] == 0) && (matrix[blocks[3].Get_X() - 1][blocks[3].Get_Y()] == 0)) ? true : false;
+		else
+			return false;
+	}
+	else if (type == 33)
+	{
+		if (blocks[1].Get_X() - 1 >= 0)
+			return ((matrix[blocks[1].Get_X() - 1][blocks[1].Get_Y()] == 0) && (matrix[blocks[3].Get_X() - 1][blocks[3].Get_Y()] == 0)) ? true : false;
+		else
+			return false;
+	}
+	else if (type == 34)
+	{
+		if (blocks[1].Get_X() - 1 >= 0)
+			return ((matrix[blocks[1].Get_X() - 1][blocks[1].Get_Y()] == 0) && (matrix[blocks[2].Get_X() - 1][blocks[2].Get_Y()] == 0) && (matrix[blocks[0].Get_X() - 1][blocks[0].Get_Y()] == 0)) ? true : false;
 		else
 			return false;
 	}
@@ -485,6 +752,34 @@ bool Game::check_collision_right(int type)
 		else
 			return false;
 	}
+	else if (type == 3)
+	{
+		if (blocks[3].Get_X() + 1 <= 9)
+			return ((matrix[blocks[0].Get_X() + 1][blocks[0].Get_Y()] == 0) && (matrix[blocks[3].Get_X() + 1][blocks[3].Get_Y()] == 0)) ? true : false;
+		else
+			return false;
+	}
+	else if (type == 32)
+	{
+		if (blocks[2].Get_X() + 1 <= 9)
+			return ((matrix[blocks[1].Get_X() + 1][blocks[1].Get_Y()] == 0) && (matrix[blocks[2].Get_X() + 1][blocks[2].Get_Y()] == 0) && (matrix[blocks[3].Get_X() + 1][blocks[3].Get_Y()] == 0)) ? true : false;
+		else
+			return false;
+	}
+	else if (type == 33)
+	{
+		if (blocks[2].Get_X() + 1 <= 9)
+			return ((matrix[blocks[2].Get_X() + 1][blocks[2].Get_Y()] == 0) && (matrix[blocks[3].Get_X() + 1][blocks[3].Get_Y()] == 0)) ? true : false;
+		else
+			return false;
+	}
+	else if (type == 34)
+	{
+		if (blocks[2].Get_X() + 1 <= 9)
+			return ((matrix[blocks[2].Get_X() + 1][blocks[2].Get_Y()] == 0) && (matrix[blocks[3].Get_X() + 1][blocks[3].Get_Y()] == 0) && (matrix[blocks[0].Get_X() + 1][blocks[0].Get_Y()] == 0)) ? true : false;
+		else
+			return false;
+	}
 }
 
 bool Game::check_collision(int type)
@@ -497,6 +792,14 @@ bool Game::check_collision(int type)
 		return ((blocks[2].Get_X()+2<=9)&&(matrix[blocks[3].Get_X()+1][blocks[3].Get_Y()+1]==0)&&(matrix[blocks[0].Get_X()+1][blocks[0].Get_Y()-1])==0) ? true : false;
 	else if (type == 23)
 		return ((blocks[2].Get_Y() - 1 >= 0) && (blocks[3].Get_Y() - 1 >= 0) && (matrix[blocks[1].Get_X() + 1][blocks[1].Get_Y()] == 0) && (matrix[blocks[2].Get_X()][blocks[2].Get_Y() - 1] == 0) && (matrix[blocks[0].Get_X()-1][blocks[0].Get_Y() - 1] == 0)) ? true : false;
+	else if (type == 31)
+		return ((blocks[0].Get_Y() - 1 >= 0) && (matrix[blocks[0].Get_X()][blocks[0].Get_Y()-1] == 0) && (matrix[blocks[2].Get_X()][blocks[2].Get_Y() - 2] == 0)) ? true : false;
+	else if (type == 32)
+		return ((blocks[2].Get_X() + 1 <= 9) && (matrix[blocks[1].Get_X()+1][blocks[1].Get_Y()] == 0) && (matrix[blocks[3].Get_X()+2][blocks[3].Get_Y()] == 0) && (matrix[blocks[2].Get_X() + 1][blocks[2].Get_Y()+1] == 0)) ? true : false;
+	else if (type == 33)
+		return ((blocks[2].Get_Y() - 1 >= 0) && (matrix[blocks[2].Get_X()][blocks[2].Get_Y()-1] == 0) && (matrix[blocks[3].Get_X() + 1][blocks[3].Get_Y()] == 0)) ? true : false;
+	else if (type == 3)
+		return ((blocks[1].Get_X() - 1 >= 0) && (matrix[blocks[2].Get_X()-2][blocks[2].Get_Y()] == 0) && (matrix[blocks[1].Get_X() - 1][blocks[1].Get_Y()] == 0)) ? true : false;
 }
 
 Game::~Game(){}

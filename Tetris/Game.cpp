@@ -1596,7 +1596,7 @@ bool Game::check_collision(int type)
 	else if (type == 3)
 		return ((blocks[1].Get_X() - 1 >= 0) && (matrix[blocks[2].Get_X()-2][blocks[2].Get_Y()] == 0) && (matrix[blocks[1].Get_X() - 1][blocks[1].Get_Y()] == 0)) ? true : false;
 	else if (type == 41)
-		return ((blocks[3].Get_Y() + 3 <= 19) && (matrix[blocks[0].Get_X()][blocks[0].Get_Y()+1] == 0) && (matrix[blocks[3].Get_X()][blocks[3].Get_Y()+2] == 0) && (matrix[blocks[3].Get_X()][blocks[3].Get_Y() + 3] == 0)) ? true : false;
+		return ((blocks[3].Get_Y() + 3 <= 19) && (matrix[blocks[0].Get_X()][blocks[0].Get_Y()+1] == 0) && (matrix[blocks[0].Get_X()][blocks[0].Get_Y()+2] == 0) && (matrix[blocks[0].Get_X()][blocks[0].Get_Y() + 3] == 0)) ? true : false;
 	else if (type == 4)
 		return ((blocks[0].Get_X() + 3 <= 9) && (matrix[blocks[0].Get_X()+1][blocks[0].Get_Y()] == 0) && (matrix[blocks[0].Get_X()+2][blocks[0].Get_Y()] == 0) && (matrix[blocks[0].Get_X()+3][blocks[0].Get_Y()] == 0)) ? true : false;
 	else if (type == 51)

@@ -28,5 +28,5 @@ private:
 	bool status{true};
 	std::chrono::high_resolution_clock::time_point start, end;
 	std::chrono::milliseconds duration, duration0{0};
-	int speed{200}; //700
+	int speed{700};
 };

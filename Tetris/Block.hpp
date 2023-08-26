@@ -1,10 +1,11 @@
 #pragma once
+#include "Tile.hpp"
 
 class Block
 {
 public:
 	Block() = default;
-	Block(std::vector<std::vector<unsigned char>> &matrix,int num,int num2);
+	Block(Tile tile, int num);
 	int& Get_X();
 	int& Get_Y();
 	~Block();

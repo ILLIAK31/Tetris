@@ -66,7 +66,7 @@ void Game::Run()
 			Update();
 		}
 		if (status == true)
-			Delete();
+			RemoveRow();
 	}
 }
 
@@ -1119,26 +1119,41 @@ void Game::Update()
 
 }
 
-void Game::Delete()
+void Game::RemoveRow()
 {
 	std::vector<int> rows;
-	for (int row = 19; row >= 0; --row)
+	for (int row = ROWS - 1; row >= 0; --row)
 	{
-		if ((matrix[0][row] != Tile::Empty) && (matrix[1][row] != Tile::Empty) && (matrix[2][row] != Tile::Empty) && (matrix[3][row] != Tile::Empty) && (matrix[4][row] != Tile::Empty) && (matrix[5][row] != Tile::Empty) && (matrix[6][row] != Tile::Empty) && (matrix[7][row] != Tile::Empty) && (matrix[8][row] != Tile::Empty) && (matrix[9][row] != Tile::Empty))
+		// Check whether row can be removed
+		bool canBeRemoved = true;
+		for (int col = 0; col < COLUMNS; ++col)
 		{
-			matrix[0][row] = matrix[1][row] = matrix[2][row] = matrix[3][row] = matrix[4][row] = matrix[5][row] = matrix[6][row] = matrix[7][row] = matrix[8][row] = matrix[9][row] = Tile::Empty;
+			if (matrix[col][row] == Tile::Empty)
+			{
+				canBeRemoved = false;
+				break;
+			}
+		}
+		if (canBeRemoved)
+		{
+			// RemoveRow row
+			for (int col = 0; col < COLUMNS; ++col)
+				matrix[col][row] = Tile::Empty;
+			// Add score for row removal
+			Score += SCORE_PER_ROW;
+
 			rows.push_back(row);
-			Score += 40;
 		}
 	}
+	// Move rows down
 	for (int l = 0; l < rows.size(); ++l)
-	{
-		for (int i = 0; i < 10; ++i)
-			for (int j = rows[0]; j > 0; --j)
-				matrix[i][j] = matrix[i][j - 1];
-		matrix[0][0] = matrix[1][0] = matrix[2][0] = matrix[3][0] = matrix[4][0] = matrix[5][0] = matrix[6][0] = matrix[7][0] = matrix[8][0] = matrix[9][0] = Tile::Empty;
-	}
-	rows.clear();
+		for (int col = 0; col < COLUMNS; ++col)
+			for (int row = rows[0]; row > 0; --row)
+				matrix[col][row] = matrix[col][row - 1];
+
+	// Remove first row(Why?)
+	for (int col = 0; col < COLUMNS; ++col)
+		matrix[col][0] = Tile::Empty;
 }
 
 void Game::EndGame()

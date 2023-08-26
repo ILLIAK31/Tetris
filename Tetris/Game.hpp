@@ -21,7 +21,7 @@ private:
 	void Render();
 	void Process();
 	void Update();
-	void Delete();
+	void RemoveRow();
 	void EndGame();
 	bool check_collision_y(int type) , check_collision_left(int type) , check_collision_right(int type) , check_collision(int type);
 	int Position{1}, Position0{1}, Position_Start{}, Score{0};

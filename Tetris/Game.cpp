@@ -209,7 +209,7 @@ void Game::SpawnTetromino()
 	}
 	
 	int tetromino_width = (max_x - min_x + 1);
-	int x = (tiles->Width() - tetromino_width) / 2, y = -min_y;
+	int x = tiles->Width() / 2 - tetromino_width / 2, y = -min_y;
 	if (!falling_tetromino.Try_Place(x, y))
 	{
 		// Losing condition of the game has been met

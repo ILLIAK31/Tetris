@@ -30,6 +30,13 @@ public:
 		const sf::Time _d_vertical_movement_interval_per_fall = sf::milliseconds(10),
 		const int _score_per_row = 40
 		);
+
+	/// <summary>
+	/// Start the game.
+	/// </summary>
+	/// <returns>
+	/// true if game was ended by losing; false otherwise.
+	/// </returns>
 	bool Run();
 	
 	int Get_Score() const;
